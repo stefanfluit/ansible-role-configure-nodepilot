@@ -25,6 +25,19 @@
         src: '{{ home_ip }}'
         logging: 'on'
         comment: 'Allow SSH access'
+      when: home_ip is defined
+
+    - name: Configure UFW for SSH when home_ip is not defined
+      community.general.ufw:
+        port: ssh
+        rule: allow
+        logging: 'on'
+      when: home_ip is not defined
+
+    - name: Show warning about SSH
+      debug:
+        msg: "SSH is now accesible for the world. Please configure your firewall to block this."
+      when: home_ip is not defined
     
     - name: Configure UFW for Node Pilot
       community.general.ufw:
