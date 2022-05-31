@@ -15,20 +15,36 @@ Debian should work but is not tested. Ubuntu 20.04, 21.10 and 22.04 are tested.
 Role Variables
 --------------
 
-* `home_ip`
-The IP address you will use to access SSH on the NodePilot server.
-###
-* `nodepilot_version`
-The version of NodePilot to install. You can find versions [here](https://docs.decentralizedauthority.com/install).
-###
-* `systemd_setup`
-If set to `true`, the role will configure systemd to start NodePilot on boot. If not, you will have to start nodepilot yourself.
-###
-* `ufw_setup`
-If set to `true`, the role will configure ufw to allow NodePilot related ports.
-###
-* `docker_setup`
-If set to `true`, the role will install Docker. This is a requirement for NodePilot, but you might have already taken care of it.
+* **Variable**: `home_ip:`
+  * **Description**: The IP address of the home server.
+  * **Required**: no
+  * **Type**: string
+  * **Default**: `empty`
+#####
+* **Variable**: `nodepilot_version:`
+  * **Description**: The version of Node Pilot to fetch from the NodePilot S3 bucket. This will be automated later.
+  * **Required**: yes
+  * **Type**: string
+  * **Default**: `"v0.12.12"`
+#####
+* **Variable**: `systemd_setup:`
+  * **Description**: Set to true if you want to configure a systemd service file for node-pilot.
+  * **Required**: no
+  * **Type**: boolean
+  * **Default**: `true`
+#####
+* **Variable**: `ufw_setup:`
+  * **Description**: If set to `true`, the role will configure ufw to allow NodePilot related ports.
+  * **Required**: yes
+  * **Type**: boolean
+  * **Default**: `true`
+#####
+* **Variable**: `docker_setup:`
+  * **Description**: If set to `true`, the role will install Docker. This is a requirement for NodePilot, but you might have already taken care of it.
+  * **Required**: yes
+  * **Type**: boolean
+  * **Default**: `true`
+#####
 
 Dependencies
 ------------
@@ -43,8 +59,6 @@ Installation
 
 Example Playbook
 ----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
 ```
 ---
