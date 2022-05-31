@@ -1,0 +1,24 @@
+galaxy_info:
+  author: Stefan Fluit
+  description: Ansible role that installs Node Pilot and configures user, firewall and Docker.
+  company: Staradix.com
+
+  role_name: ansible_role_configure_nodepilot
+  namespace: stefanfluit
+
+  license: MIT
+
+  min_ansible_version: 2.9
+
+  platforms:
+  - name: Ubuntu
+    versions:
+    - focal
+    - impish
+    - jammy
+
+  galaxy_tags:
+    - pokt
+    - pocket-network
+
+dependencies: []
