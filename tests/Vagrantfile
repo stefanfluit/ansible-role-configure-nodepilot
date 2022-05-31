@@ -1,0 +1,31 @@
+Vagrant.configure("2") do |config|
+
+    config.vm.box = "ubuntu/focal64"
+    config.vm.synced_folder "../", "/vagrant/roles/ansible-role-node-pilot-configurator"
+    config.vm.network "forwarded_port", guest: 80, host: 8080
+    config.vm.network "forwarded_port", guest: 443, host: 8443
+    config.vm.network "forwarded_port", guest: 34416, host: 34416
+    config.vm.network "forwarded_port", guest: 19999, host: 19999
+    config.vm.network "forwarded_port", guest: 26656, host: 26656
+
+  
+    config.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+      v.cpus = 2
+      v.name = "node-pilot-configurator"
+    end
+
+    $script = <<-SCRIPT
+      sudo apt-get update
+      sudo apt-get install -y software-properties-common
+      sudo apt-add-repository ppa:ansible/ansible -y
+      sudo apt-get install -y ansible 
+      
+      ansible-galaxy install geerlingguy.docker --force
+
+      ansible-playbook -i /vagrant/roles/ansible-role-node-pilot-configurator/tests/inventory /vagrant/roles/ansible-role-node-pilot-configurator/tests/test.yml
+     SCRIPT
+
+    config.vm.provision "shell", inline: $script, privileged: false
+
+  end
