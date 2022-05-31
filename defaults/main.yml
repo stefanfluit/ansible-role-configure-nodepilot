@@ -1,0 +1,20 @@
+---
+# defaults file for ansible-role-configure-nodepilot
+
+# https://whatismyipaddress.com/
+home_ip: 
+
+# https://docs.decentralizedauthority.com/install
+nodepilot_version: "v0.12.12"
+
+# Set to true if you want to configure a systemd service file for node-pilot, this will ensure that node-pilot is started on boot
+systemd_setup: true
+
+# Set to true if you want to configure a ufw firewall, this will ensure that ufw is configured to allow node-pilot
+ufw_setup: true
+
+# Set to true if you want node-pilot to run after the playbook has completed
+run_on_completion: true
+
+# Set to true if you want the role to ensure Docker is available on the system
+docker_setup: true
