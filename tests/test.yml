@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  become: true
+
+  vars:
+    ansible_connection: local
+
+  roles:
+    - "/vagrant/roles/ansible-role-node-pilot-configurator"
