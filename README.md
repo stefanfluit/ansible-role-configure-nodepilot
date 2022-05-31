@@ -2,6 +2,10 @@ ansible-role-configure-nodepilot
 =========
 
 Ansible role that installs Node Pilot and configures user, firewall and Docker.
+###
+Do note, this role is somehwat tested but is not completely done. I will build in more checks and all.
+###
+If you have any remarks, please let me know or just create a pull request.
 
 Requirements
 ------------
@@ -60,4 +64,5 @@ MIT
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Name: Stefan Fluit
+Email: [info+pokt-ansible@fluit-online.nl](mailto://info+pokt-ansible@fluit-online.nl)
