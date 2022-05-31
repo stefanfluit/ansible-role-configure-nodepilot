@@ -1,0 +1,43 @@
+---
+
+- name: Run tasks
+  block:
+
+    - name: Enable UFW
+      community.general.ufw:
+        state: enabled
+        policy: deny
+        direction: incoming
+    
+    - name: Enable logging
+      community.general.ufw:
+        logging: 'on'
+    
+    - name: Set connection rate limit
+      community.general.ufw:
+        rule: limit
+        port: ssh
+    
+    - name: Configure UFW for SSH access
+      community.general.ufw:
+        port: ssh
+        rule: allow
+        src: '{{ home_ip }}'
+        logging: 'on'
+        comment: 'Allow SSH access'
+    
+    - name: Configure UFW for Node Pilot
+      community.general.ufw:
+        port: '{{ item.port }}'
+        rule: '{{ item.rule }}'
+        src: '{{ item.src }}'
+        logging: 'off'
+        comment: '{{ item.comment }}'
+      with_items: '{{ pokt_ports }}'
+
+  rescue:
+
+    - name: Display the error
+      fail:
+        msg: "Ansible failed, error message is: \n ```{{ ansible_failed_result | to_nice_json }}``` "
+      delegate_to: localhost

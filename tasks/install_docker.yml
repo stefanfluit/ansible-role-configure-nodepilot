@@ -1,0 +1,16 @@
+---
+# tasks file for ansible-role-configure-nodepilot
+
+- name: Install Docker
+  block:
+
+    - name: Install Docker
+      include_role:
+        name: "geerlingguy.docker"
+
+  rescue:
+
+    - name: Display the error
+      fail:
+        msg: "Ansible failed, error message is: \n ```{{ ansible_failed_result | to_nice_json }}``` "
+      delegate_to: localhost

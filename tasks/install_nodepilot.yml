@@ -1,0 +1,52 @@
+---
+# tasks file for ansible-role-configure-nodepilot
+
+- name: Install Node Pilot
+  block:
+
+    - name: Fetch the Node-Pilot binary
+      get_url:
+        url: "https://{{ node_pilot_repository }}/node-pilot/{{ nodepilot_version }}/np"
+        dest: "/home/{{ np_admin }}/np"
+        owner: "{{ np_admin }}"
+        mode: +x
+
+    - name: Set the node-pilot binary path variable to use in Service file
+      set_fact:
+        np_bin_path: "/home/{{ np_admin }}/np"
+      when: systemd_setup
+
+    - name: Ensure systemd file for Node-Pilot exists
+      template:
+        src: "node-pilot.service.j2"
+        dest: "/etc/systemd/system/node-pilot.service"
+        owner: 'root'
+        group: 'root'
+        mode: 0644
+      when: systemd_setup
+
+    - name: Just force systemd to reread configs (2.4 and above)
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Ensure Node Pilot runs on boot
+      ansible.builtin.systemd:
+        name: 'node-pilot'
+        enabled: yes
+
+    - name: Start Node-Pilot
+      ansible.builtin.systemd:
+        name: 'node-pilot'
+        state: started
+      when: run_on_completion
+
+    - name: Completion message
+      debug:
+        msg: "Node-Pilot installed successfully, you can now access it at https://{{ home_ip }}"
+
+  rescue:
+
+    - name: Display the error
+      fail:
+        msg: "Ansible failed, error message is: \n ```{{ ansible_failed_result | to_nice_json }}``` "
+      delegate_to: localhost

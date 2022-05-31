@@ -1,0 +1,18 @@
+---
+# tasks file for ansible-role-configure-nodepilot
+
+- name: Run prerequisites checks
+  include_tasks: "prerequisites.yml"
+
+- name: Install Docker
+  include_tasks: "install_docker.yml"
+  when:
+    - docker_setup
+
+- name: Configure ufw
+  include_tasks: "ufw.yml"
+  when: 
+    - ufw_setup
+
+- name: Install Node-Pilot
+  include_tasks: "install_nodepilot.yml"

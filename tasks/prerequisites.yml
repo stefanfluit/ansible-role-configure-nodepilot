@@ -1,0 +1,35 @@
+---
+# tasks file for ansible-role-configure-nodepilot
+
+- name: Run tasks
+  block:
+
+    - name: Ensure group 'docker' exists
+      group:
+        name: docker
+        state: present
+
+    - name: Ensure node-pilot user exists
+      user:
+        name: "{{ np_admin }}"
+        state: present
+        groups:
+          - 'docker'
+
+    - name: Run the equivalent of "apt-get update" as a separate step
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install the packages in the "packages_to_install" list
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ packages_to_install }}"
+
+  rescue:
+
+    - name: Display the error
+      fail:
+        msg: "Ansible failed, error message is: \n ```{{ ansible_failed_result | to_nice_json }}``` "
+      delegate_to: localhost
